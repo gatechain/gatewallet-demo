@@ -24,5 +24,5 @@ const accountSignature = await res.gateWallet.signCreateAccountAuthorization(
 // 交易签名
 // tx: 交易体
 // type: "order" | "cancelOrder" | "withdraw"
-const signature = _gateWallet.getSignature(tx, type);
+const signature = res.gateWallet.getSignature(tx, type);
 ```
