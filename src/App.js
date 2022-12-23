@@ -80,13 +80,18 @@ function App() {
 
   // 3. 签名订单
   function signOrder() {
-    // order,cancelOrder的交易体
+    // order的交易体
     const tx = {
       contract: "BTC_USDT",
       price: "13458.9",
       size: 10000,
       user_id: 12,
     };
+    // cancelOrder
+    const tx = {
+      order_id: order_id,
+      user_id: 12
+    }
     // withdraw的交易体
     // const tx = {
     //   user_id: 12,
