@@ -2,21 +2,72 @@ import { ethers } from "ethers";
 import { useState } from "react";
 import { createWalletFromGateChainAccount } from "gatewallet";
 import "./App.css";
-
 const config = {
   85: {
     CONTRACT_ADDRESSES: {
       GateChain: "0x71aa80b6360e59eDA365A75DB417e12d3E948C3c",
     },
-    contractLeftMap: {
-      BTC: 0,
-      ETH: 1,
-    },
-    contractRightMap: {
-      USDC: 0,
-      USDT: 1,
-      USD: 2,
-    },
+    contractNames: [
+      "BTC_USDT",
+      "ETH_USDT",
+      "LQTY_USDT",
+      "BNX_USDT",
+      "ASTR_USDT",
+      "INJ_USDT",
+      "LTC_USDT",
+      "AAVE_USDT",
+      "APE_USDT",
+      "DOT_USDT",
+      "FLOKI_USDT",
+      "ADA_USDT",
+      "ANKR_USDT",
+      "SAND_USDT",
+      "BLUR_USDT",
+      "LUNC_USDT",
+      "SRM_USDT",
+      "AXS_USDT",
+      "MAGIC_USDT",
+      "BONK_USDT",
+      "LINK_USDT",
+      "CFX_USDT",
+      "DYDX_USDT",
+      "LUNA_USDT",
+      "FTM_USDT",
+      "SHIB_USDT",
+      "OG_USDT",
+      "XEM_USDT",
+      "MINA_USDT",
+      "OP_USDT",
+      "ACH_USDT",
+      "SUSHI_USDT",
+      "ARB_USDT",
+      "NEAR_USDT",
+      "BCH_USDT",
+      "FIL_USDT",
+      "PEOPLE_USDT",
+      "GALA_USDT",
+      "SXP_USDT",
+      "JOE_USDT",
+      "AVAX_USDT",
+      "EOS_USDT",
+      "XRP_USDT",
+      "MATIC_USDT",
+      "LINA_USDT",
+      "ETC_USDT",
+      "MASK_USDT",
+      "STX_USDT",
+      "JASMY_USDT",
+      "HOOK_USDT",
+      "APT_USDT",
+      "DOGE_USDT",
+      "AGIX_USDT",
+      "RDNT_USDT",
+      "RACA_USDT",
+      "LDO_USDT",
+      "RNDR_USDT",
+      "VGX_USDT",
+      "ID_USDT",
+    ],
   },
 };
 
@@ -50,22 +101,25 @@ function App() {
     const localData =
       JSON.parse(localStorage.getItem("accountAuthSignatures")) || {};
 
+    const _chainId = (await provider.getNetwork()).chainId;
     const isNotAccountSignature =
-      chainId &&
+      _chainId &&
       res.gateAddress &&
-      localData[chainId] &&
-      localData[chainId][res.gateAddress]
+      localData[_chainId] &&
+      localData[_chainId][res.gateAddress]
         ? false
         : true;
 
+    console.log(_chainId, "chainId");
     // 如果没有签名的需要调用, [交互优化，为了不频繁签名]
     if (isNotAccountSignature) {
       // Metamask 再次对 eddsa pubkey 进行签名，然后将 eddsa pubkey、签名发送到后台
       const accountSignature =
-        await res.gateWallet.signCreateAccountAuthorization(provider, signer);
+        await res.gateWallet.signCreateAccountAuthorization(signer);
 
       const data = JSON.stringify({
-        [chainId]: {
+        ...localData,
+        [_chainId]: {
           [res.gateAddress]: accountSignature,
         },
       });
@@ -80,28 +134,39 @@ function App() {
 
   // 3. 签名订单
   function signOrder() {
-    // order的交易体
-    const tx = {
+    // order,cancelOrder的交易体
+    // const tx = {
+    //   contract: "BTC_USDT",
+    //   price: "13458.9",
+    //   size: 10000,
+    //   user_id: 12,
+    // };
+    const tx1 = {
       contract: "BTC_USDT",
-      price: "13458.9",
-      size: 10000,
-      user_id: 12,
+      price: "86815",
+      size: "10000",
+      user_id: "1679001941",
     };
-    // cancelOrder
-    const tx = {
-      order_id: order_id,
-      user_id: 12
-    }
+    // const tx = {
+    //   order_id: 11,
+    //   user_id: 12,
+    // };
     // withdraw的交易体
     // const tx = {
     //   user_id: 12,
     //   amount: 10000,
     // };
     const type = "order"; // "order" "cancelOrder", "withdraw"
+    console.log("type:", type);
+    console.log("tx:", tx1);
     console.log(_gateWallet, "-----");
     //签名交易 （第一个参数是tx，第二个参数type）
-    const signature = _gateWallet.getSignature(tx, type);
-    console.log("signature:", signature);
+    try {
+      const signature = _gateWallet.getSignature(tx1, type);
+      console.log("signature:", signature);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
