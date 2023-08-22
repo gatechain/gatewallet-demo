@@ -141,12 +141,12 @@ function App() {
     //   size: 10000,
     //   user_id: 12,
     // };
-    const tx1 = {
-      contract: "BTC_USDT",
-      price: "86815",
-      size: "10000",
-      user_id: "1679001941",
-    };
+    // const tx1 = {
+    //   contract: "BTC_USDT",
+    //   price: "86815",
+    //   size: "10000",
+    //   user_id: "1679001941",
+    // };
     // const tx = {
     //   order_id: 11,
     //   user_id: 12,
@@ -156,13 +156,42 @@ function App() {
     //   user_id: 12,
     //   amount: 10000,
     // };
-    const type = "order"; // "order" "cancelOrder", "withdraw"
+    // spotOrder
+    // const tx = {
+    //   side: 1, // 买入 -> 0 , 卖出 -> 1
+    //   money_id: 2,
+    //   token_id: 3,
+    //   user_id: 4,
+    //   price: 5,
+    //   amount: 6,
+    // };
+    const tx = {
+      side: 0,
+      money_id: 257,
+      token_id: 256,
+      user_id: 1879003775,
+      price: 11,
+      amount: 11,
+    };
+    // spotCancelOrder
+    // const tx = {
+    //   user_id: 1,
+    //   order_id: 2,
+    // };
+    // spotWithdraw
+    // const tx = {
+    //   user_id: 1,
+    //   business_type: 1,
+    //   token_id: 2,
+    //   amount: 1000,
+    // };
+    const type = "spotOrder"; // "order" "cancelOrder", "withdraw", "spotOrder", "spotCancelOrder" , "spotWithdraw"
     console.log("type:", type);
-    console.log("tx:", tx1);
+    console.log("tx:", tx);
     console.log(_gateWallet, "-----");
     //签名交易 （第一个参数是tx，第二个参数type）
     try {
-      const signature = _gateWallet.getSignature(tx1, type);
+      const signature = _gateWallet.getSignature(tx, type);
       console.log("signature:", signature);
     } catch (err) {
       console.log(err);
